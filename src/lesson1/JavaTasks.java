@@ -1,6 +1,8 @@
 package lesson1;
 
 import kotlin.NotImplementedError;
+import java.util.*;
+import java.io.*;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -96,8 +98,24 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
+        Reader fileReader = new FileReader(inputName);
+        ArrayList<Double> temperatures = new ArrayList<>();
+        BufferedReader buffReader = new BufferedReader(fileReader);
+        FileWriter fileWriter = new FileWriter(new File(outputName));
+        do {
+            String local = buffReader.readLine();
+            if (local == null)
+                break;
+            temperatures.add(Double.valueOf(local));
+        } while (true);
+        Collections.sort(temperatures);
+        for (int i = 0; i <= temperatures.size() - 1; i++) {
+            if (i != temperatures.size() - 1)
+                fileWriter.write(temperatures.get(i).toString() + "\n");
+            else fileWriter.write(temperatures.get(i).toString());
+        }
+        fileWriter.close();
     }
 
     /**
