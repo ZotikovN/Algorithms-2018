@@ -64,7 +64,9 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public void sortAddresses(String inputName, String outputName) {
+    static public void sortAddresses(String inputName, String outputName) throws IOException {
+        File inputFile = new File(inputName);
+        Scanner input = new Scanner(inputFile);
         throw new NotImplementedError();
     }
 
@@ -107,6 +109,8 @@ public class JavaTasks {
             String local = buffReader.readLine();
             if (local == null)
                 break;
+            if (Double.valueOf(local) < -273.0 || Double.valueOf(local) > 500.0)
+                throw new IllegalArgumentException();
             temperatures.add(Double.valueOf(local));
         } while (true);
         Collections.sort(temperatures);
