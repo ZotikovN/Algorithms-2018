@@ -1,6 +1,8 @@
 package lesson1;
 
 import kotlin.NotImplementedError;
+
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
@@ -66,8 +68,47 @@ public class JavaTasks {
      */
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         File inputFile = new File(inputName);
-        Scanner input = new Scanner(inputFile);
-        throw new NotImplementedError();
+        FileWriter output = new FileWriter(new File(outputName));
+        Scanner inputScan = new Scanner(inputFile);
+        List<List<String>> inputList = new ArrayList<>();
+        Map<String, List<String>> outputMap = new TreeMap<>();
+        List<String> namesList;
+        String local;
+        do {
+            local = inputScan.nextLine();
+            if (!local.matches("^[А-я]+ [А-я]+ - [А-я]+ \\d+$"))
+                throw new IllegalArgumentException();
+            String[] addresses = local.split(" - ");
+            inputList.add(Arrays.asList(addresses[0],addresses[1]));
+        } while (inputScan.hasNext());
+        inputScan.close();
+        for (int i = 0; i < inputList.size(); i++) {
+            List<String> inputLocal = inputList.get(i);
+            String name = inputLocal.get(0);
+            String address = inputLocal.get(1);
+            if (outputMap.containsKey(address)) {
+                outputMap.get(address).add(name);
+
+            } else {
+                List<String> names = new ArrayList<>();
+                names.add(name);
+                outputMap.put(address, names);
+            }
+        }
+        Iterator<Map.Entry<String, List<String>>> itr = outputMap.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, List<String>> entry = itr.next();
+            namesList = outputMap.get(entry.getKey());
+            StringBuilder namesLocal = new StringBuilder();
+            if (outputMap.get(entry.getKey()).size() > 1) {
+                for (int i = 0; i < namesList.size() - 1; i++) {
+                    namesLocal.append(namesList.toArray()[i]).append(", ");
+                }
+            }
+            namesLocal.append(namesList.toArray()[namesList.size() - 1]);
+            output.write(entry.getKey() + " - " + namesLocal + "\n");
+        }
+        output.close();
     }
 
     /**

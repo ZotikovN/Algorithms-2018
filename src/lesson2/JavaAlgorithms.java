@@ -96,8 +96,26 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) {
+        int longestString = 0;
+        int maxIndex = 0;
+        String result = "";
+        int[][] matrix = new int[first.length()][second.length()];
+        for (int i = 0; i < first.length(); i++) {
+            for (int j = 0; j < second.length(); j++) {
+                if (i > 0 && j > 0 && first.charAt(i-1) == second.charAt(j-1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                    if (longestString < matrix[i][j]) {
+                        maxIndex = i;
+                        longestString = matrix[i][j];
+                    }
+                }
+            }
+        }
+        if (!(maxIndex == 0)) {
+            result = first.substring(maxIndex - longestString, maxIndex);
+        }
+        return result;
     }
 
     /**
