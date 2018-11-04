@@ -3,7 +3,10 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.IOException;
 import java.util.Set;
+import java.util.*;
+import java.io.*;
 
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
@@ -31,8 +34,23 @@ public class JavaAlgorithms {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) {
-        throw new NotImplementedError();
+    static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) throws IOException {
+        int a = 0;
+        Pair<Integer, Integer> result = new Pair<>(0, 0);
+        File inputFile = new File(inputName);
+        Scanner fileScan = new Scanner(inputFile);
+        List<Integer> priceList = new ArrayList<>();
+        do { priceList.add(fileScan.nextInt()); } while (fileScan.hasNextInt());
+        for (int i = 0; i < priceList.size() - 1; i++) {
+            for (int j = i + 1; j < priceList.size(); j++) {
+                if (priceList.get(j) - priceList.get(i) > a) {
+                    a = priceList.get(j) - priceList.get(i);
+                    result = new Pair<>(i + 1, j + 1);
+                }
+            }
+
+        }
+        return result;
     }
 
     /**
@@ -82,7 +100,13 @@ public class JavaAlgorithms {
      * Х х Х
      */
     static public int josephTask(int menNumber, int choiceInterval) {
-        throw new NotImplementedError();
+        int result = 0;
+        if (menNumber != 0) {
+            for (int i = 1; i <= menNumber; i++) {
+                result = (result + choiceInterval) % i;
+            }
+        }
+        return result + 1;
     }
 
     /**
@@ -129,7 +153,27 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      */
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        int result;
+        if (limit <= 1) return 0;
+        if (limit == 2) return 1;
+        else {
+            result = 2;
+        }
+        int halfLimit = limit / 2;
+        boolean[] primes = new boolean[limit];
+        for (int i = 1; i < halfLimit; i++) {
+            int c = (halfLimit - i) / (1 + 2 * i);
+            for (int j = i; j <= c; j++) {
+                int chk = i + j + 2 * i * j;
+                primes[chk] = true;
+            }
+        }
+        for (int i = 2; i < primes.length / 2; i++) {
+            if (!primes[i]) {
+                result++;
+            }
+        }
+        return result;
     }
 
     /**
