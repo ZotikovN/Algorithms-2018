@@ -190,9 +190,11 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @Override
         public void remove() {
             if (current != null) {
-                root = delete(current.value, root);
+                T parent = current.value;
+                root = delete(parent, root);
                 size--;
             }
+            else throw new NoSuchElementException();
         }
     }
 
