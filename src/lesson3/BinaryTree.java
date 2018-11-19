@@ -64,10 +64,46 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      * Удаление элемента в дереве
      * Средняя
      */
+    //затраты по времени O(h)
+    //затраты по ресурсам O(h)
     @Override
     public boolean remove(Object o) {
-        // TODO
-        throw new NotImplementedError();
+        if (root != null) {
+            @SuppressWarnings("unchecked") T parent = (T) o;
+            root = delete(parent, root);
+            size--;
+            return true;
+        }
+        return false;
+    }
+
+    private Node<T> delete(T parent, Node<T> currentRoot) {
+        if (parent.compareTo(currentRoot.value) > 0) {
+            currentRoot.right = delete(parent, currentRoot.right);
+        }
+        else if (parent.compareTo(currentRoot.value) < 0) {
+            currentRoot.left = delete(parent, currentRoot.left);
+        }
+        else if (currentRoot.left == null || currentRoot.right == null) {
+            if (currentRoot.left == null) {
+                currentRoot = currentRoot.right;
+            }
+            else {
+                currentRoot = currentRoot.left;
+            }
+        }
+        else {
+            Node<T> localRoot = currentRoot.right;
+            while (localRoot.left != null) {
+                localRoot = localRoot.left;
+            }
+            Node<T> local = new Node<T>(localRoot.value);
+            local.right = currentRoot.right;
+            local.left = currentRoot.left;
+            currentRoot = local;
+            currentRoot.right = delete(currentRoot.value, currentRoot.right);
+        }
+        return currentRoot;
     }
 
     @Override
@@ -108,9 +144,31 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          * Поиск следующего элемента
          * Средняя
          */
+        //затраты по времени O(h)
+        //затраты по ресурсам O(1)
         private Node<T> findNext() {
-            // TODO
-            throw new NotImplementedError();
+            Node<T> result = null;
+            int localValue;
+            if (current != null) {
+                Node<T> parent = root;
+                while (parent != null) {
+                    localValue = parent.value.compareTo(current.value);
+                    if (localValue > 0) {
+                        result = parent;
+                        parent = parent.left;
+                    } else {
+                        parent = parent.right;
+                    }
+                }
+                return result;
+            }
+            else{
+                result = root;
+                while (result.left != null) {
+                    result = result.left;
+                }
+                return result;
+            }
         }
 
         @Override
@@ -131,8 +189,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            // TODO
-            throw new NotImplementedError();
+            if (current != null) {
+                root = delete(current.value, root);
+                size--;
+            }
         }
     }
 
